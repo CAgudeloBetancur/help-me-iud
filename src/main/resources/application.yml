@@ -1,0 +1,48 @@
+server:
+  port: 4343
+  servlet:
+    context-path: /api/v1
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+
+spring:
+  application:
+    name: HelpmeIudApplication
+
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.MySQL8Dialect
+    show-sql: true
+    defer-datasource-initialization: true
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: camilo.agudelob@est.iudigital.edu.co
+    password: <password>
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+security:
+  jwt:
+    client-service: HelpmeIUD
+    password-service: <contrasenia>
+    scope-write: write
+    grant-password: password
+    grant-refresh: refresh_token
+    token-validity-seconds: 3600
+    refresh-validity-seconds: 3600
