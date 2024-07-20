@@ -4,10 +4,7 @@ import co.edu.iudigital.helpmeiud.dtos.casos.CasoResponseDto;
 import co.edu.iudigital.helpmeiud.dtos.usuarios.UsuarioRequestDto;
 import co.edu.iudigital.helpmeiud.dtos.usuarios.UsuarioRequestUpdateDto;
 import co.edu.iudigital.helpmeiud.dtos.usuarios.UsuarioResponseDto;
-import co.edu.iudigital.helpmeiud.exceptions.BadRequestException;
-import co.edu.iudigital.helpmeiud.exceptions.ErrorDto;
-import co.edu.iudigital.helpmeiud.exceptions.InternalServerErrorException;
-import co.edu.iudigital.helpmeiud.exceptions.RestException;
+import co.edu.iudigital.helpmeiud.exceptions.*;
 import co.edu.iudigital.helpmeiud.models.Caso;
 import co.edu.iudigital.helpmeiud.models.Role;
 import co.edu.iudigital.helpmeiud.models.RoleEnum;
@@ -126,7 +123,21 @@ public class UsuarioServiceImplementation implements IUsuarioService, UserDetail
 
     @Override
     public UsuarioResponseDto consultarPorId(Long id) throws RestException {
-        return null;
+        log.info("consultando usuario por id en UsuarioServiceImplementation");
+        Usuario usuarioEntity = usuarioRepository
+            .findById(id)
+            .orElseThrow(
+                () -> new NotFoundException(
+                    ErrorDto
+                        .builder()
+                        .error("No encontrado")
+                        .message("Usuario no existe")
+                        .status(404)
+                        .date(LocalDateTime.now())
+                        .build()
+                )
+            );
+        return usuarioMapper.toUsuarioResponseDto(usuarioEntity);
     }
 
     @Override

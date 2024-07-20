@@ -107,7 +107,7 @@ public class CasoController {
             description = "Endpoint para editar un caso"
     )
     @ResponseStatus(HttpStatus.CREATED)
-    @PutMapping
+    @PutMapping("/visible/{id}")
     public ResponseEntity<Boolean> updateVisible(
         @PathVariable Long id,
         @RequestBody CasoRequestVisibleDto request

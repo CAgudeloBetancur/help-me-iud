@@ -157,7 +157,7 @@ public class UsuarioController {
             .body(usuarioService.subirImagen(image, authentication));
     }
 
-//    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('USER')")
     @ApiResponses(
         value = {
             @ApiResponse(responseCode = "400", description = "Bad Request"),
@@ -185,6 +185,25 @@ public class UsuarioController {
         }
         headers.add(HttpHeaders.CONTENT_TYPE, mimeType);
         return new ResponseEntity<>(resource, headers, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "400", description = "Bad Request"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "404", description = "Not Found"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error")
+        }
+    )
+    @Operation(summary = "Consulta un usuario por id", description = "Consulta un usuario por id")
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{id}")
+    public ResponseEntity<UsuarioResponseDto> getOne(@PathVariable(value = "id") Long id) throws RestException {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(usuarioService.consultarPorId(id));
     }
 
 }

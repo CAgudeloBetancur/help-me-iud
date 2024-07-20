@@ -9,7 +9,6 @@ import org.springframework.security.core.Authentication;
 import java.util.List;
 
 public interface ICasoService {
-
     List<CasoResponseDto> consultarCasos() throws RestException;
     List<CasoResponseDto> consultarCasosVisibles() throws RestException;
     CasoResponseDto crearCaso(CasoRequestDto caso, Authentication authentication) throws RestException;
@@ -17,5 +16,4 @@ public interface ICasoService {
     CasoResponseDto obtenerCasoPorId(Long id) throws RestException;
     List<CasoResponseDto> consultarCasosPorUsuario(Authentication authentication) throws RestException;
     CasoResponseDto editarCaso(CasoRequestUpdateDto caso, Long id) throws RestException;
-
 }

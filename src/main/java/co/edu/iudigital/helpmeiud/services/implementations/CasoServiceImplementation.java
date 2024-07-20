@@ -191,7 +191,7 @@ public class CasoServiceImplementation implements ICasoService {
                         .builder()
                         .error("No encontrado")
                         .message("Caso no existe")
-                        .status(400)
+                        .status(404)
                         .date(LocalDateTime.now())
                         .build()
                 )
