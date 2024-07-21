@@ -65,12 +65,13 @@ public class CasoController {
         description = "Endpoint para consultar todos los casos visibles"
     )
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/visibility")
+    @GetMapping("/visibles")
     public ResponseEntity<List<CasoResponseDto>> indexVisible(
-        @RequestParam(required = true) boolean visible
+        @RequestParam(required = true) boolean visible,
+        Authentication authentication
     ) throws RestException {
         log.info("Ejecutando indexVisible en CasoController");
-        return ResponseEntity.status(HttpStatus.OK).body(casoService.consultarCasosVisibles(visible));
+        return ResponseEntity.status(HttpStatus.OK).body(casoService.consultarCasosVisibles(authentication, visible));
     }
 
     @PreAuthorize("hasRole('USER')")

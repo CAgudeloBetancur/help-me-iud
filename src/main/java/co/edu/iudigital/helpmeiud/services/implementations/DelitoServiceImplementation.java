@@ -2,10 +2,7 @@ package co.edu.iudigital.helpmeiud.services.implementations;
 
 import co.edu.iudigital.helpmeiud.dtos.delitos.DelitoRequestDto;
 import co.edu.iudigital.helpmeiud.dtos.delitos.DelitoResponseDto;
-import co.edu.iudigital.helpmeiud.exceptions.ErrorDto;
-import co.edu.iudigital.helpmeiud.exceptions.InternalServerErrorException;
-import co.edu.iudigital.helpmeiud.exceptions.NotFoundException;
-import co.edu.iudigital.helpmeiud.exceptions.RestException;
+import co.edu.iudigital.helpmeiud.exceptions.*;
 import co.edu.iudigital.helpmeiud.models.Delito;
 import co.edu.iudigital.helpmeiud.models.Usuario;
 import co.edu.iudigital.helpmeiud.repositories.IDelitoRepository;
@@ -15,9 +12,11 @@ import co.edu.iudigital.helpmeiud.services.interfaces.IUsuarioService;
 import co.edu.iudigital.helpmeiud.utils.DelitoMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -48,7 +47,7 @@ public class DelitoServiceImplementation implements IDelitoService {
                     ErrorDto
                         .builder()
                         .error("No encontrado")
-                        .message("Delito no existe")
+                        .message("Usuario no existe")
                         .status(400)
                         .date(LocalDateTime.now())
                         .build()
@@ -63,12 +62,23 @@ public class DelitoServiceImplementation implements IDelitoService {
                 .build();
             delitoEntity = delitoRepository.save(delitoEntity);
             return delitoMapper.toDelitoResponseDto(delitoEntity);
+        } catch (DataIntegrityViolationException e) {
+            log.error(e.getMessage(), e);
+            throw new InternalServerErrorException(
+                ErrorDto
+                    .builder()
+                    .error("Conflicto")
+                    .status(409)
+                    .message("Nombre del delito ya existe")
+                    .date(LocalDateTime.now())
+                    .build()
+            );
         } catch (Exception e) {
             throw new InternalServerErrorException(
                 ErrorDto
                     .builder()
                     .error("Error General")
-                    .status(500)
+                    .status(409)
                     .message(e.getMessage())
                     .date(LocalDateTime.now())
                     .build()
@@ -92,7 +102,9 @@ public class DelitoServiceImplementation implements IDelitoService {
                         .build()
                 );
             });
-        delitoExistente.setNombre(delito.getNombre());
+        if(!delito.getNombre().equals(delitoExistente.getNombre())) {
+            delitoExistente.setNombre(delito.getNombre());
+        }
         delitoExistente.setDescripcion(delito.getDescripcion());
         try {
             return delitoMapper.toDelitoResponseDto( delitoRepository.save(delitoExistente) );

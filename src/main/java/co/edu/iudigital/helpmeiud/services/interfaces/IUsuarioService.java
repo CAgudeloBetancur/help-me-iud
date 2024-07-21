@@ -26,4 +26,5 @@ public interface IUsuarioService {
         Authentication authentication
     ) throws RestException;
     UrlResource obtenerImagen(String name) throws RestException;
+    Boolean habilitarUsuario(Boolean habilitado, Long id) throws RestException;
 }

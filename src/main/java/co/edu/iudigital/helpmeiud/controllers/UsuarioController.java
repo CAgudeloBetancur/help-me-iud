@@ -1,7 +1,9 @@
 package co.edu.iudigital.helpmeiud.controllers;
 
+import co.edu.iudigital.helpmeiud.dtos.casos.CasoRequestVisibleDto;
 import co.edu.iudigital.helpmeiud.dtos.casos.CasoResponseDto;
 import co.edu.iudigital.helpmeiud.dtos.usuarios.UsuarioRequestDto;
+import co.edu.iudigital.helpmeiud.dtos.usuarios.UsuarioRequestEnabledDto;
 import co.edu.iudigital.helpmeiud.dtos.usuarios.UsuarioRequestUpdateDto;
 import co.edu.iudigital.helpmeiud.dtos.usuarios.UsuarioResponseDto;
 import co.edu.iudigital.helpmeiud.exceptions.RestException;
@@ -130,6 +132,30 @@ public class UsuarioController {
         return ResponseEntity
             .status(HttpStatus.CREATED)
             .body(usuarioService.editar(request, authentication));
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "400", description = "Bad Request"),
+                    @ApiResponse(responseCode = "401", description = "Unauthorized"),
+                    @ApiResponse(responseCode = "403", description = "Forbidden"),
+                    @ApiResponse(responseCode = "500", description = "Internal Server Error")
+            }
+    )
+    @Operation(
+            summary = "Habilitar un usuario",
+            description = "Endpoint para habilitar un usuario"
+    )
+    @ResponseStatus(HttpStatus.CREATED)
+    @PutMapping("/enabled/{id}")
+    public ResponseEntity<Boolean> updateEnabled(
+            @PathVariable Long id,
+            @RequestBody UsuarioRequestEnabledDto request
+    ) throws RestException {
+        log.info("Ejecutando updateEnabled en UsuarioController");
+        final Boolean enabled = request.getEnabled();
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.habilitarUsuario(enabled, id));
     }
 
     @PreAuthorize("hasRole('USER')")

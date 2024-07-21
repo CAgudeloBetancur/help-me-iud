@@ -1,6 +1,7 @@
 package co.edu.iudigital.helpmeiud.repositories;
 
 import co.edu.iudigital.helpmeiud.models.Caso;
+import co.edu.iudigital.helpmeiud.models.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -29,7 +30,7 @@ public interface ICasoRepository extends JpaRepository<Caso,Long> {
         /*@Query("SELECT c FROM Caso c WHERE c.usuario.username = :username")
         List<Caso> findAllByUsuarioUsername3(@Param("username") String user);*/
 
-    List<Caso> findAllByVisible(Boolean visible);
+    List<Caso> findAllByUsuarioUsernameAndVisible(String usuario, Boolean visible);
 
         // Este método busca casos por true o false, depende de lo que se pase por parámetro
 

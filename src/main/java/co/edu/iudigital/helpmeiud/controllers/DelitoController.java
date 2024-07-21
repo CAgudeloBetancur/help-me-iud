@@ -36,6 +36,7 @@ public class DelitoController {
             @ApiResponse(responseCode = "400", description = "Bad Request"),
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "409", description = "Conflict"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
         }
     )

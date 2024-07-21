@@ -2,6 +2,7 @@ package co.edu.iudigital.helpmeiud.configs;
 
 import co.edu.iudigital.helpmeiud.exceptions.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,6 +52,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ErrorDto> getBadRequestException(BadRequestException exception) {
         log.info(exception.getErrorDto().getMessage());
         return new ResponseEntity<>(exception.getErrorDto(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler({DuplicatedValueException.class})
+    public ResponseEntity<ErrorDto> getConflictException(DuplicatedValueException exception) {
+        log.info(exception.getErrorDto().getMessage());
+        return new ResponseEntity<>(exception.getErrorDto(), HttpStatus.CONFLICT);
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)

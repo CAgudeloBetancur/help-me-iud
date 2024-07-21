@@ -13,6 +13,7 @@ import co.edu.iudigital.helpmeiud.repositories.IRoleRepository;
 import co.edu.iudigital.helpmeiud.repositories.IUsuarioRepository;
 import co.edu.iudigital.helpmeiud.services.interfaces.IEmailService;
 import co.edu.iudigital.helpmeiud.services.interfaces.IUsuarioService;
+import co.edu.iudigital.helpmeiud.utils.Messages;
 import co.edu.iudigital.helpmeiud.utils.UsuarioMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -283,6 +284,39 @@ public class UsuarioServiceImplementation implements IUsuarioService, UserDetail
             log.error(e.getMessage());
         }
         return resource;
+    }
+
+    @Override
+    public Boolean habilitarUsuario(Boolean habilitado, Long id) throws RestException {
+        log.info("habilitarCaso usuarioServiceImplementation");
+        Usuario usuarioExistente = usuarioRepository.findById(id)
+            .orElseThrow(() -> {
+                log.error("Error al consultar usuario: {}", id);
+                return new NotFoundException(
+                    ErrorDto
+                        .builder()
+                        .error(Messages.NO_ENCONTRADO)
+                        .message("Usuario no existe")
+                        .status(HttpStatus.NOT_FOUND.value())
+                        .date(LocalDateTime.now())
+                        .build()
+                );
+            });
+        try {
+            usuarioExistente.setEnabled(habilitado);
+            usuarioExistente = usuarioRepository.saveAndFlush(usuarioExistente);
+            return usuarioExistente != null;
+        } catch(Exception e) {
+            log.error("Error al consultar usuario: {}", e.getMessage());
+            throw new InternalServerErrorException(
+                ErrorDto
+                    .builder()
+                    .error("Error General")
+                    .message("Error al intentar actualizar usuario")
+                    .date(LocalDateTime.now())
+                    .build()
+            );
+        }
     }
 
     @Override
