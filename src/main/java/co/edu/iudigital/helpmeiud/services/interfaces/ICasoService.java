@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface ICasoService {
     List<CasoResponseDto> consultarCasos() throws RestException;
-    List<CasoResponseDto> consultarCasosVisibles() throws RestException;
+    List<CasoResponseDto> consultarCasosVisibles(boolean visible) throws RestException;
     CasoResponseDto crearCaso(CasoRequestDto caso, Authentication authentication) throws RestException;
     Boolean visibilizarCaso(Boolean visible, Long id) throws RestException;
     CasoResponseDto obtenerCasoPorId(Long id) throws RestException;

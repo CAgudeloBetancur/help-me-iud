@@ -9,6 +9,11 @@ services:
       DATABASE_URL: jdbc:mysql://basedatos:3306/helpme_iud_app_db?createDatabaseIfNotExist=true
       DATABASE_USERNAME: iud
       DATABASE_PASSWORD: Primera_123!
+      EMAIL_USERNAME: camilo.agudelob@est.iudigital.edu.co
+      EMAIL_PASSWORD: agudelob_cam_c#_2024_guacharnaca
+      CLIENT_SERVICE: HelpmeIUD
+      PASSWORD_SERVICE: 123456
+      JWT_SECRET: aksfdñli28349aksfñladksf_kflksadfMsdflkasdlf#skflkasdfkkkasdkfl3243
     networks:
       - iudigital
     depends_on:

@@ -63,10 +63,10 @@ public class CasoServiceImplementation implements ICasoService {
     }
 
     @Override
-    public List<CasoResponseDto> consultarCasosVisibles() throws RestException {
+    public List<CasoResponseDto> consultarCasosVisibles(boolean visible) throws RestException {
         log.info("consultarCasosVisibles CasoServiceImplementation");
         try {
-            final List<Caso> casos = casoRepository.findAllByVisible(true);
+            final List<Caso> casos = casoRepository.findAllByVisible(visible);
             final List<CasoResponseDto> casoResponseDtoList = casoMapper.toCasoResponseDtoList(casos);
             return casoResponseDtoList;
         }catch (Exception e) {

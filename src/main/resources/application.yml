@@ -28,8 +28,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: camilo.agudelob@est.iudigital.edu.co
-    password: <password>
+    username: ${EMAIL_USERNAME}
+    password: ${EMAIL_PASSWORD}
     properties:
       mail:
         smtp:
@@ -39,10 +39,13 @@ spring:
 
 security:
   jwt:
-    client-service: HelpmeIUD
-    password-service: <contrasenia>
+    client-service: ${CLIENT_SERVICE}
+    password-service: ${PASSWORD_SERVICE}
+    scope-read: read
     scope-write: write
     grant-password: password
     grant-refresh: refresh_token
     token-validity-seconds: 3600
     refresh-validity-seconds: 3600
+    expiration: 3600000
+    secret: ${JWT_SECRET}

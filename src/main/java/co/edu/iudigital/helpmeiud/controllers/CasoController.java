@@ -56,7 +56,8 @@ public class CasoController {
     @PreAuthorize("hasRole('USER')")
     @ApiResponses(
         value = {
-            @ApiResponse(responseCode = "500", description = "Internal Server Error")
+            @ApiResponse(responseCode = "500", description = "Internal Server Error"),
+            @ApiResponse(responseCode = "400", description = "Bad Request")
         }
     )
     @Operation(
@@ -64,11 +65,12 @@ public class CasoController {
         description = "Endpoint para consultar todos los casos visibles"
     )
     @ResponseStatus(HttpStatus.OK)
-//    @PreAuthorize("hasRole('USER')")
-    @GetMapping("/visibles")
-    public ResponseEntity<List<CasoResponseDto>> indexVisible() throws RestException {
+    @GetMapping("/visibility")
+    public ResponseEntity<List<CasoResponseDto>> indexVisible(
+        @RequestParam(required = true) boolean visible
+    ) throws RestException {
         log.info("Ejecutando indexVisible en CasoController");
-        return ResponseEntity.status(HttpStatus.OK).body(casoService.consultarCasosVisibles());
+        return ResponseEntity.status(HttpStatus.OK).body(casoService.consultarCasosVisibles(visible));
     }
 
     @PreAuthorize("hasRole('USER')")
