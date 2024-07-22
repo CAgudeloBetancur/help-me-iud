@@ -10,12 +10,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IUsuarioService {
     List<UsuarioResponseDto> consultarUsuarios() throws RestException;
     UsuarioResponseDto registrar(UsuarioRequestDto usuarioRequestDto) throws RestException;
     UsuarioResponseDto consultarPorId(Long id) throws RestException;
-    Usuario findByUsername(String username);
+    UsuarioResponseDto findByUsername(String username) throws RestException;
     UsuarioResponseDto consultarPorUsername(Authentication authentication) throws RestException;
     UsuarioResponseDto editar(
         UsuarioRequestUpdateDto usuarioRequestUpdateDto,

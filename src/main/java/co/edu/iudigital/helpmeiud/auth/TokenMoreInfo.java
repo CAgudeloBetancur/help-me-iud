@@ -1,5 +1,6 @@
 package co.edu.iudigital.helpmeiud.auth;
 
+import co.edu.iudigital.helpmeiud.dtos.usuarios.UsuarioResponseDto;
 import co.edu.iudigital.helpmeiud.exceptions.RestException;
 import co.edu.iudigital.helpmeiud.models.Usuario;
 import co.edu.iudigital.helpmeiud.services.interfaces.IUsuarioService;
@@ -31,7 +32,7 @@ public class TokenMoreInfo implements TokenEnhancer {
             OAuth2AccessToken accessToken,
             OAuth2Authentication authentication) {
         try {
-            Usuario usuario = usuarioService.findByUsername(authentication.getName());
+            UsuarioResponseDto usuario = usuarioService.findByUsername(authentication.getName());
             Map<String, Object> info = new HashMap<>();
             info.put("id_usuario", ""+usuario.getId());
             info.put("nombre", usuario.getNombre());

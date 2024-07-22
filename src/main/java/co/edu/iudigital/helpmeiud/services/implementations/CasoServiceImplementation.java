@@ -16,6 +16,7 @@ import co.edu.iudigital.helpmeiud.repositories.IUsuarioRepository;
 import co.edu.iudigital.helpmeiud.services.interfaces.ICasoService;
 import co.edu.iudigital.helpmeiud.utils.CasoMapper;
 import co.edu.iudigital.helpmeiud.utils.Messages;
+import co.edu.iudigital.helpmeiud.utils.ModelEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -53,9 +54,9 @@ public class CasoServiceImplementation implements ICasoService {
             throw new InternalServerErrorException(
                 ErrorDto
                     .builder()
-                    .error("Error general")
+                    .error(Messages.ERROR_GENERAL)
                     .status(500)
-                    .message(e.getMessage())
+                    .message(Messages.ERROR_GENERAL)
                     .date(LocalDateTime.now())
                     .build()
             );
@@ -75,8 +76,8 @@ public class CasoServiceImplementation implements ICasoService {
             throw new InternalServerErrorException(
                 ErrorDto
                     .builder()
-                    .error("Error general")
-                    .message(e.getMessage())
+                    .error(Messages.ERROR_GENERAL)
+                    .message(Messages.ERROR_GENERAL)
                     .date(LocalDateTime.now())
                     .build()
             );
@@ -96,7 +97,7 @@ public class CasoServiceImplementation implements ICasoService {
                 return new NotFoundException(
                     ErrorDto
                         .builder()
-                        .message("Delito no encontrado")
+                        .message(ModelEnum.DELITO.name() + " " + Messages.NO_ENCONTRADO)
                         .error(Messages.NO_ENCONTRADO)
                         .status(404)
                         .date(LocalDateTime.now())
@@ -110,8 +111,8 @@ public class CasoServiceImplementation implements ICasoService {
                 return new NotFoundException(
                     ErrorDto
                         .builder()
-                        .error("Usuario no encontrado")
-                        .message("Usuario no existe")
+                        .error(Messages.NO_ENCONTRADO)
+                        .message(ModelEnum.USUARIO.name() + " " + Messages.NO_ENCONTRADO)
                         .status(404)
                         .date(LocalDateTime.now())
                         .build()
@@ -139,9 +140,9 @@ public class CasoServiceImplementation implements ICasoService {
             throw new InternalServerErrorException(
                 ErrorDto
                     .builder()
-                    .error("Error General")
+                    .error(Messages.ERROR_GENERAL)
                     .status(500)
-                    .message("No se ha creado el caso")
+                    .message(Messages.ERROR_GENERAL)
                     .date(LocalDateTime.now())
                     .build()
             );
@@ -158,7 +159,7 @@ public class CasoServiceImplementation implements ICasoService {
                     ErrorDto
                         .builder()
                         .error(Messages.NO_ENCONTRADO)
-                        .message("Caso no existe")
+                        .message(ModelEnum.CASO.name() + " " + Messages.NO_ENCONTRADO)
                         .status(HttpStatus.NOT_FOUND.value())
                         .date(LocalDateTime.now())
                         .build()
@@ -173,8 +174,8 @@ public class CasoServiceImplementation implements ICasoService {
             throw new InternalServerErrorException(
                 ErrorDto
                     .builder()
-                    .error("Error General")
-                    .message("Error al intentar actualizar caso")
+                    .error(Messages.ERROR_GENERAL)
+                    .message(Messages.ERROR_GENERAL)
                     .date(LocalDateTime.now())
                     .build()
             );
@@ -190,8 +191,8 @@ public class CasoServiceImplementation implements ICasoService {
                 () -> new NotFoundException(
                     ErrorDto
                         .builder()
-                        .error("No encontrado")
-                        .message("Caso no existe")
+                        .error(Messages.NO_ENCONTRADO)
+                        .message(ModelEnum.CASO.name() + " " + Messages.NO_ENCONTRADO)
                         .status(404)
                         .date(LocalDateTime.now())
                         .build()
@@ -212,8 +213,8 @@ public class CasoServiceImplementation implements ICasoService {
             throw  new NotFoundException(
                 ErrorDto
                     .builder()
-                    .error("No encontrado")
-                    .message("Delito no existe")
+                    .error(Messages.NO_ENCONTRADO)
+                    .message(ModelEnum.CASO.name() + "S " + Messages.NO_ENCONTRADO + "s")
                     .status(400)
                     .date(LocalDateTime.now())
                     .build()
@@ -230,8 +231,8 @@ public class CasoServiceImplementation implements ICasoService {
                 () -> new NotFoundException(
                     ErrorDto
                         .builder()
-                        .error("No encontrado")
-                        .message("Caso no existe")
+                        .error(Messages.NO_ENCONTRADO)
+                        .message(ModelEnum.CASO.name() + " " + Messages.NO_ENCONTRADO)
                         .status(400)
                         .date(LocalDateTime.now())
                         .build()
@@ -248,8 +249,8 @@ public class CasoServiceImplementation implements ICasoService {
                 () -> new NotFoundException(
                     ErrorDto
                         .builder()
-                        .error("No encontrado")
-                        .message("Delito no existe")
+                        .error(Messages.NO_ENCONTRADO)
+                        .message(ModelEnum.DELITO.name() + " " + Messages.NO_ENCONTRADO)
                         .status(400)
                         .date(LocalDateTime.now())
                         .build()

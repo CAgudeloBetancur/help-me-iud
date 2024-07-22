@@ -14,12 +14,14 @@ import co.edu.iudigital.helpmeiud.repositories.IUsuarioRepository;
 import co.edu.iudigital.helpmeiud.services.interfaces.IEmailService;
 import co.edu.iudigital.helpmeiud.services.interfaces.IUsuarioService;
 import co.edu.iudigital.helpmeiud.utils.Messages;
+import co.edu.iudigital.helpmeiud.utils.ModelEnum;
 import co.edu.iudigital.helpmeiud.utils.UsuarioMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -131,8 +133,8 @@ public class UsuarioServiceImplementation implements IUsuarioService, UserDetail
                 () -> new NotFoundException(
                     ErrorDto
                         .builder()
-                        .error("No encontrado")
-                        .message("Usuario no existe")
+                        .error(Messages.NO_ENCONTRADO)
+                        .message(ModelEnum.USUARIO.name() + " " + Messages.NO_ENCONTRADO)
                         .status(404)
                         .date(LocalDateTime.now())
                         .build()
@@ -142,21 +144,27 @@ public class UsuarioServiceImplementation implements IUsuarioService, UserDetail
     }
 
     @Override
-    public Usuario findByUsername(String username) {
-        return usuarioRepository
+    public UsuarioResponseDto findByUsername(String username) throws RestException {
+        Usuario usuario = usuarioRepository
             .findByUsername(username)
             .orElseThrow(
-                () -> {
-                    log.error("Usuario no encontrado: " + username);
-                    return new UsernameNotFoundException("El usuario " + username + " no existe");
-                }
+                () -> new NotFoundException(
+                    ErrorDto
+                        .builder()
+                        .error(Messages.NO_ENCONTRADO)
+                        .message(ModelEnum.USUARIO.name() + " " + Messages.NO_ENCONTRADO)
+                        .status(404)
+                        .date(LocalDateTime.now())
+                        .build()
+                )
             );
+        return usuarioMapper.toUsuarioResponseDto(usuario);
     }
 
     @Override
     public UsuarioResponseDto consultarPorUsername(Authentication authentication) throws RestException {
         if(!authentication.isAuthenticated()){
-            // Lanzar error para autenticación
+            throw new AuthenticationException("User is not authenticated") {};
         }
         String username = authentication.getName();
         Usuario usuario = usuarioRepository.findByUsername(username)
@@ -179,8 +187,8 @@ public class UsuarioServiceImplementation implements IUsuarioService, UserDetail
             () -> new BadRequestException(
                 ErrorDto
                     .builder()
-                    .error(HttpStatus.NOT_FOUND.getReasonPhrase())
-                    .message("Usuario no existe")
+                    .error(Messages.NO_ENCONTRADO)
+                    .message(ModelEnum.USUARIO.name() + " " + Messages.NO_ENCONTRADO)
                     .status(HttpStatus.NOT_FOUND.value())
                     .date(LocalDateTime.now())
                     .build()
@@ -220,8 +228,8 @@ public class UsuarioServiceImplementation implements IUsuarioService, UserDetail
                 () -> new BadRequestException(
                     ErrorDto
                         .builder()
-                        .error(HttpStatus.NOT_FOUND.getReasonPhrase())
-                        .message("Usuario no existe")
+                        .error(Messages.NO_ENCONTRADO)
+                        .message(ModelEnum.USUARIO.name() + " " + Messages.NO_ENCONTRADO)
                         .status(HttpStatus.NOT_FOUND.value())
                         .date(LocalDateTime.now())
                         .build()
@@ -281,7 +289,7 @@ public class UsuarioServiceImplementation implements IUsuarioService, UserDetail
                 resource = new UrlResource(path.toUri());
             }
         } catch(MalformedURLException e) {
-            log.error(e.getMessage());
+            log.error("Error creando path para imagen: {}", e.getMessage());
         }
         return resource;
     }
@@ -296,7 +304,7 @@ public class UsuarioServiceImplementation implements IUsuarioService, UserDetail
                     ErrorDto
                         .builder()
                         .error(Messages.NO_ENCONTRADO)
-                        .message("Usuario no existe")
+                        .message(ModelEnum.USUARIO.name() + " " + Messages.NO_ENCONTRADO)
                         .status(HttpStatus.NOT_FOUND.value())
                         .date(LocalDateTime.now())
                         .build()
@@ -311,8 +319,8 @@ public class UsuarioServiceImplementation implements IUsuarioService, UserDetail
             throw new InternalServerErrorException(
                 ErrorDto
                     .builder()
-                    .error("Error General")
-                    .message("Error al intentar actualizar usuario")
+                    .error(Messages.ERROR_GENERAL)
+                    .message(Messages.ERROR_GENERAL)
                     .date(LocalDateTime.now())
                     .build()
             );
